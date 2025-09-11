@@ -1,5 +1,5 @@
 import {Router} from "express";
-import { actualizarUsuario, crearComentario, crearPubli, crearUsuario, getComentarios, getPublis, getPublisPorCurso, getPublisPorProfe, login, obtenerUsuario, recuperarPass } from "../controllers/routes.controller.js";
+import { actualizarUsuario, crearComentario, crearPubli, crearUsuario, getComentarios, getPublis, getPublisPorCurso, getPublisPorProfe, login, obtenerCursos, obtenerProfes, obtenerUsuario, recuperarPass } from "../controllers/routes.controller.js";
 
 const routes = Router();
 
@@ -14,4 +14,7 @@ routes.get("/publicacion/obtenerPubliCurso/:id_curso", getPublisPorCurso);
 routes.get("/publicacion/obtenerPubliProfe/:id_profesor", getPublisPorProfe);
 routes.post("/comentario/crear", crearComentario);
 routes.get("/comentario/get/:id_publicacion", getComentarios);
+routes.get("/profesores/get", obtenerProfes);
+routes.get("/cursos/get", obtenerCursos);
+
 export default routes;

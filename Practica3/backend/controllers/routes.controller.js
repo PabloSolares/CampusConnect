@@ -69,6 +69,36 @@ export const obtenerUsuario = async(req, res) => {
     }
 }
 
+export const obtenerProfes = async(req, res) => {
+    try {
+        const [rows] = await pool.query("SELECT * FROM profesores");
+
+        if(rows.length === 0) {
+            res.status(400).json(({message: "NO HAY PROFESORES"}));
+        }
+
+        res.status(202).json(rows);
+
+    } catch (err) {
+        res.status(500).json(({message: err.message}));
+    }
+}
+
+export const obtenerCursos = async(req, res) => {
+    try {
+        const [rows] = await pool.query("SELECT * FROM cursos");
+
+        if(rows.length === 0) {
+            return res.status(400).json(({message: "NO HAY CURSOS"}));
+        }
+
+       return res.status(202).json(rows);
+
+    } catch (err) {
+       return res.status(500).json(({message: err.message}));
+    }
+}
+
 export const actualizarUsuario = async(req, res) => {
     try {
         const { nombres, apellidos, email } = req.body;
@@ -144,7 +174,7 @@ export const getPublis =  async (req, res) => {
             LEFT JOIN Cursos c on p.id_curso = c.id_curso
             LEFT JOIN Profesores pr on p.id_profesor= pr.id_profesor
             ORDER BY p.fecha_creacion DESC ;    `, [req.params.id]);
-        res.json(rows);
+        res.status(200).json(rows);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
