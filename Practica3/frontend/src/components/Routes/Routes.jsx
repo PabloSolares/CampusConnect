@@ -5,6 +5,8 @@ import Register from '../UI/Users/Register';
 import Recuperar from '../UI/Users/Recuperar';
 import Menu from '../UI/Interfaz/Menu';
 import CreatePubli from '../UI/Interfaz/CreatePubli';
+import Comentarios from '../UI/Interfaz/Comentarios';
+import Perfil from '../UI/Interfaz/Perfil';
 
 function Router() {
   return (
@@ -16,6 +18,9 @@ function Router() {
             <Route path='/menu' element={<Menu />}></Route>
             
             <Route path='/createPubli' element={<CreatePubli />}></Route>
+            <Route path='/comentar/:id' element={<Comentarios />}></Route>
+            <Route path='/perfil/:id' element={<Perfil />}></Route>
+
 
 
         </Routes>

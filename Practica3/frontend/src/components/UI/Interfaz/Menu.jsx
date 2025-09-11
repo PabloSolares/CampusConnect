@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 
@@ -9,7 +9,7 @@ export default  function  Menu() {
 const [filterProfesor, setFilterProfesor] = useState("");
 const [filterEstudiante, setFilterEstudiante] = useState("");
   const [publicaciones, setPublicaciones] = useState([]);
-    
+    const id_usuario = localStorage.getItem("usuario");
   useEffect(() => {
 
     const llenarPubli = async () => {
@@ -31,8 +31,11 @@ const publicacionesFiltradas = publicaciones.filter(pub =>
   (pub.profesor?.toLowerCase() || "").includes(filterProfesor.toLowerCase()) &&
   (pub.estudiante?.toLowerCase() || "").includes(filterEstudiante.toLowerCase())
 );
-  
-    
+    const navigate = useNavigate();
+    const cerrarSesion = (e) => {
+      localStorage.clear();
+      navigate('/');
+    }
 
   return (
     <div className="d-flex vh-100 bg-light">
@@ -42,13 +45,13 @@ const publicacionesFiltradas = publicaciones.filter(pub =>
         <h4 className="mb-4">Menú</h4>
         <ul className="nav nav-pills flex-column mb-auto">
           <li className="nav-item mb-2">
-            <Link to="/profile/mi" className="nav-link text-white">Mi Perfil</Link>
+            <Link to={`/perfil/${id_usuario}`} className="nav-link text-white">Mi Perfil</Link>
           </li>
           <li className="nav-item mb-2">
             <Link to="/createPubli" className="nav-link text-white">Crear Publicación</Link>
           </li>
           <li className="nav-item mb-2">
-            <button className="btn btn-danger w-100">Cerrar Sesión</button>
+            <button className="btn btn-danger w-100" onClick={(e) => cerrarSesion(e)}>Cerrar Sesión</button>
           </li>
         </ul>
       </div>
@@ -74,12 +77,11 @@ const publicacionesFiltradas = publicaciones.filter(pub =>
         <div className="list-group">
           {publicacionesFiltradas.map((pub) => (
               <div key={pub.id_publicacion} className="list-group-item mb-3 shadow-sm rounded">
-                <h5>{pub.nombre_curso}: {pub.profesor}</h5>
+                <h5>{pub.nombre_curso} {pub.profesor}</h5>
                 <p className="mb-1">{pub.mensaje}</p>
                 <small>{pub.estudiante} | {pub.fecha_creacion}</small>
                 <div className="mt-2">
-                  <Link to={`/profile/${pub.usuario}`} className="btn btn-sm btn-outline-primary me-2">Ver Perfil</Link>
-                  <Link to={`/create`} className="btn btn-sm btn-outline-success">Comentar</Link>
+                  <Link to={`/comentar/${pub.id_publicacion}`} className="btn btn-sm btn-outline-success">Comentar</Link>
                 </div>
               </div>
             ))}

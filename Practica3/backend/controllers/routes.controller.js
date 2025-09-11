@@ -56,6 +56,7 @@ export const login = async(req, res) => {
 
 export const obtenerUsuario = async(req, res) => {
     try {
+        
         const [rows] = await pool.query("SELECT id_usuario registro_academico, nombres, apellidos, email FROM estudiantes WHERE id_usuario = ?", [req.params.id]);
 
         if(rows.length === 0) {
@@ -102,8 +103,8 @@ export const obtenerCursos = async(req, res) => {
 export const actualizarUsuario = async(req, res) => {
     try {
         const { nombres, apellidos, email } = req.body;
-        if(validarCorreo(correo)){
-            await pool.query("UPDATE estudiantes SET nombres = ?, apellidos = ?, correo = ?  email WHERE id_usuario = ?", [nombres, apellidos,email, req.params.id]);
+        if(validarCorreo(email)){
+            await pool.query("UPDATE estudiantes SET nombres = ?, apellidos = ?, email = ?  WHERE id_usuario = ?", [nombres, apellidos,email, req.params.id]);
         } else {
             res.status(400).json(({error: "Correo no es valido. Ejemplo: usuario@ejemplo.com"}));
         }
@@ -198,6 +199,45 @@ export const getPublisPorCurso =  async (req, res) => {
 
 }
 
+export const getPublisPorID = async (req, res) => {
+    try {
+        const { id_publicacion } = req.params;
+        
+        const [rows] = await pool.query(
+            `
+            SELECT 
+                p.id_publicacion,
+                p.mensaje,
+                p.fecha_creacion,
+                u.nombres AS estudiante,
+                c.nombre_curso AS curso,
+                pr.nombres AS profesor
+            FROM publicacion_cursos p
+                JOIN estudiantes u ON p.id_usuario = u.id_usuario
+                LEFT JOIN Cursos c ON p.id_curso = c.id_curso
+                LEFT JOIN Profesores pr ON p.id_profesor = pr.id_profesor
+            WHERE p.id_publicacion = ?
+            ORDER BY p.fecha_creacion DESC
+            `,
+            [id_publicacion]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "Publicación no encontrada" });
+        }
+
+        return res.status(200).json(rows[0]);
+
+    } catch (err) {
+        console.error("Error al obtener publicación:", err);
+        return res.status(500).json({
+            status: 500,
+            message: "Error al obtener la publicación",
+            error: err.message
+        });
+    }
+};
+
 export const getPublisPorProfe = async (req, res) => {
     try {
         const [rows] = await pool.query(`            
@@ -238,8 +278,8 @@ export async function getComentarios(req, res) {
     
         const id_publicacion = req.params.id_publicacion;
 
-        let [response] = await pool.query('SELECT pc.id_publicacion, e.nombres, e.apellidos, pc.mensaje FROM comentarios pc JOIN estudiantes e ON e.id_usuario = pc.id_usuario WHERE pc.id_publicacion = ?', [id_publicacion])
-        return res.status(200).json({status: 200, comentarios: response})
+        let [response] = await pool.query('SELECT * FROM comentarios pc JOIN estudiantes e ON e.id_usuario = pc.id_usuario WHERE pc.id_publicacion = ?', [id_publicacion])
+        return res.status(200).json(response)
     } catch (error) {
         return res.status(500).json({"message": `Error al obtener los comentarios de la publicación ${error}`});
     }

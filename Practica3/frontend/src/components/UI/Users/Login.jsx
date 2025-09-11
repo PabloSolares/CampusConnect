@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
 export default function Login() {
     const[reg, setReg] = useState('');
@@ -7,10 +7,12 @@ export default function Login() {
     const[errorMsg, seterrorMsg] = useState('');
     const[successMsg, setsuccessMsg] = useState('');
 
+    const navigate = useNavigate();
     const handleSubmit  =  (e) => {
        e.preventDefault();
         seterrorMsg("");  
         setsuccessMsg(""); 
+    
 
        (async () => {
             try {
@@ -23,6 +25,8 @@ export default function Login() {
                     localStorage.clear();
                     localStorage.setItem("usuario", response.data.token.id_usuario);
                     setsuccessMsg(response.data.message || "Login exitoso ");
+      navigate('/menu');
+
                 }
             } catch (error) {
                 if(error.response){

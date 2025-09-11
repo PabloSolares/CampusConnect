@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CreatePubli() {
     const [tipo, setTipo] = useState("Curso");
@@ -43,12 +43,12 @@ export default function CreatePubli() {
         llenarProfes();
     }, []);
 
+    const id_usuario = localStorage.getItem("usuario");
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         seterrorMsg("");
         setsuccessMsg("");
-        const id_usuario = localStorage.getItem("usuario");
 
         (async () => {
             try {
@@ -84,7 +84,11 @@ export default function CreatePubli() {
         })()
 
     }
-
+    const navigate = useNavigate();
+    const cerrarSesion = (e) => {
+      localStorage.clear();
+      navigate('/');
+    }
     return (
         <div className="d-flex vh-100 bg-light">
             <div
@@ -94,9 +98,7 @@ export default function CreatePubli() {
                 <h4 className="mb-4">Menú</h4>
                 <ul className="nav nav-pills flex-column mb-auto">
                     <li className="nav-item mb-2">
-                        <Link to="/profile/mi" className="nav-link text-white">
-                            Mi Perfil
-                        </Link>
+                        <Link to={`/perfil/${id_usuario}`} className="nav-link text-white">Mi Perfil</Link>
                     </li>
                     <li className="nav-item mb-2">
                         <Link to="/menu" className="nav-link text-white">
@@ -104,7 +106,7 @@ export default function CreatePubli() {
                         </Link>
                     </li>
                     <li className="nav-item mb-2">
-                        <button className="btn btn-danger w-100">Cerrar Sesión</button>
+                        <button className="btn btn-danger w-100" onClick={(e) => cerrarSesion(e)}>Cerrar Sesión</button>
                     </li>
                 </ul>
             </div>
