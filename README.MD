@@ -42,7 +42,7 @@ El módulo principal se encuentra en `Practica3`.
 Practica3/
 ├── frontend/   # Aplicación React
 └── backend/    # API REST con Node.js y Express
-
+```
 ##Instalación
 Configura primero las variables de entorno del backend. No incluyas contraseñas ni claves directamente en el repositorio.
 cd Practica3/backend
