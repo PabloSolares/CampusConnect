@@ -49,11 +49,11 @@ cd Practica3/backend
 npm install
 npm run dev
 
-##En otra terminal:
+## En otra terminal:
 cd Practica3/frontend
 npm install
 npm start
 
-##Objetivo
+## Objetivo
 Este proyecto permitió aplicar conceptos de desarrollo full-stack, diseño de APIs, autenticación, bases de datos relacionales y desarrollo de interfaces web.
 Las demás carpetas contienen prácticas iniciales. La aplicación principal es Practica3.
