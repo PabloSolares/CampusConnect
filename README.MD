@@ -43,7 +43,7 @@ Practica3/
 ├── frontend/   # Aplicación React
 └── backend/    # API REST con Node.js y Express
 ```
-##Instalación
+## Instalación
 Configura primero las variables de entorno del backend. No incluyas contraseñas ni claves directamente en el repositorio.
 ```bash
 cd Practica3/backend
